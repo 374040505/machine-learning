@@ -1,0 +1,82 @@
+import os  
+import sys  
+import time  
+import numpy  
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+x=[[0.697,0.460,1],    #Input data x1 x2 and Expected output  0 or 1
+[0.774,0.376,1],
+[0.634,0.264,1],
+[0.608,0.318,1],
+[0.556,0.215,1],
+[0.403,0.237,1],
+[0.481,0.149,1],
+[0.666,0.091,0],
+[0.243,0.267,0],
+[0.245,0.057,0],
+[0.343,0.099,0],
+[0.639,0.161,0],
+[0.657,0.198,0],
+[0.360,0.370,0],
+[0.593,0.042,0],
+[0.437,0.211,1],
+[0.719,0.103,0]]
+
+v=[[-1.5,1.36],        #Initial Connection weight v w and threshold 
+   [-2.6,2.11]]
+
+w=[3.30,-2.80]
+
+b=[[-2.77,1.72],
+   [-0.53,0]]
+n=0.9                 #learning rate 
+import numpy as np
+def sigmoid(x):
+    return 1/(1+np.exp(-x)) 
+
+h = np.zeros((15,2))
+y = np.zeros(15)
+e = np.zeros(2)
+i=0
+Esum=4
+Ex=5
+j=0
+while(j<200):                                                       #iteration 200 times
+    Ex=Esum
+    Esum=0
+    i=0
+    j=j+1
+    while (i<15):
+        h[i][0]=sigmoid(v[0][0]*x[i][0]+v[0][1]*x[i][1]-b[0][0])
+        h[i][1]=sigmoid(v[1][0]*x[i][0]+v[1][1]*x[i][1]-b[0][1])
+        y[i]=sigmoid(h[i][0]*w[0]+h[i][1]*w[1]-b[1][0])              #complete MPL
+        E=0
+        E=np.square(y[i]-x[i][2])/2 
+        Esum=Esum+E
+        g=y[i]*(1-y[i])*(x[i][2]-y[i])
+        e[0]=h[i][0]*(1-h[i][0])*w[0]*g
+        e[1]=h[i][1]*(1-h[i][1])*w[1]*g
+
+        w[0]=n*g*h[i][0]+w[0]
+        w[1]=n*g*h[i][1]+w[1]
+        b[1][0]=-n*g+b[1][0]
+        v[0][0]=n*e[0]*x[i][0]+v[0][0]
+        v[0][1]=n*e[1]*x[i][0]+v[0][1]
+        v[1][0]=n*e[0]*x[i][1]+v[1][0]
+        v[1][1]=n*e[1]*x[i][1]+v[1][1]
+        b[0][0]=b[0][0]-n*e[0]
+        b[0][1]=b[0][1]-n*e[1]                                      #complete BP
+        i = i + 1 
+ 
+print(v)
+print(w)
+print(b)
+print(Esum)
+u= 10
+r=sigmoid(v[0][0]*x[u][0]+v[0][1]*x[u][1]-b[0][0])
+s=sigmoid(v[1][0]*x[u][0]+v[1][1]*x[u][1]-b[0][1])
+t=sigmoid(r*w[0]+s*w[1]-b[1][0])
+print(t)
